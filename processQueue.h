@@ -3,43 +3,41 @@
  *                                                                   *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #include <pthread.h>
-
+#include <stdlib.h>
 
 struct processNode {
-  p_thread proc;
+  int waitTime;
+  char name[2];
+  int burstTime;
+  pthread_t proc;
   struct processNode *next;
 };
 
-extern processNode *head;
-extern processNode *tail;
+extern struct processNode *head;
+extern struct processNode *tail;
 
 
-void addProcess (p_thread p){
+void addProcess (pthread_t p){
+  struct processNode *tmp;
   if (head == NULL){
-    struct processNode tmp;
-    tmp =(struct processNode *)malloc(sizeof(struct processNode));
-    tmp.proc = p
-    head = &tmp;
+    tmp = malloc(sizeof(struct processNode));
+    tmp->proc = p;
+    head = tmp;
     head->next = NULL;
     tail = head;
   } else {
-    struct processNode tmp;
-    tmp = (struct processNode *)malloc(sizeof(struct processNode));
-    tmp.proc = p;
-    tail.next = tmp;
-    tail = tail.next;
+    tmp = malloc(sizeof(struct processNode));
+    tmp->proc = p;
+    tail->next = tmp;
+    tail = tail->next;
   }
 }
 
-processNode nextProcess(){
-  processNode tmp = head;
-  head = head.next;
- 
-  if (tmp == NULL){
-    return NULL;
-  }else {
-    return tmp;
-  }
+struct processNode *nextProcess(){
+  struct processNode *tmp;
+  tmp = head;
+  head = head->next;
+  return tmp;
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
